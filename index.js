@@ -1,52 +1,71 @@
-import { FlashbotsBundleProvider } from "@flashbots/ethers-provider-bundle";
-import { Contract, providers, Wallet } from "ethers";
-import { get } from "https"
-import { getDefaultRelaySigningKey } from "./utils";
-import 
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import { start } from './data/Mempool.js'
+import Transaction from './models/transaction.js'
 
-const ETHEREUM_RPC_URL = process.env.ETHEREUM_RPC_URL || "http://127.0.0.1:8545"
-const PRIVATE_KEY = process.env.PRIVATE_KEY || ""
-const BUNDLE_EXECUTOR_ADDRESS = process.env.BUNDLE_EXECUTOR_ADDRESS || ""
+dotenv.config();
 
-const FLASHBOTS_RELAY_SIGNING_KEY = process.env.FLASHBOTS_RELAY_SIGNING_KEY || getDefaultRelaySigningKey();
 
-const MINER_REWARD_PERCENTAGE = parseInt(process.env.MINER_REWARD_PERCENTAGE || "80")
+const app = express()
+  
+const port = process.env.PORT || 3000
 
-if (PRIVATE_KEY === "") {
-  console.warn("Must provide PRIVATE_KEY environment variable")
-  process.exit(1)
-}
-if (BUNDLE_EXECUTOR_ADDRESS === "") {
-  console.warn("Must provide BUNDLE_EXECUTOR_ADDRESS environment variable. Please see README.md")
-  process.exit(1)
-}
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(helmet());
+app.use(morgan('common'));
+app.use(cors());
 
-if (FLASHBOTS_RELAY_SIGNING_KEY === "") {
-  console.warn("Must provide FLASHBOTS_RELAY_SIGNING_KEY. Please see https://github.com/flashbots/pm/blob/main/guides/searcher-onboarding.md")
-  process.exit(1)
-}
 
-const HEALTHCHECK_URL = process.env.HEALTHCHECK_URL || ""
+// var connected = false
 
-const provider = new providers.StaticJsonRpcProvider(ETHEREUM_RPC_URL);
+// mongoose.connect(
+//   process.env.MONGO_URL,
+//   {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     useFindAndModify: true,
+//   },
+//   () => {
+//     console.log("mongodb connected!");
+//     connected = true
+//   },
+// )
 
-const arbitrageSigningWallet = new Wallet(PRIVATE_KEY);
-const flashbotsRelaySigningWallet = new Wallet(FLASHBOTS_RELAY_SIGNING_KEY);
+// Post route to handle form submission 
+// logic and add data to the database
+app.post('/upload', async (req, res) => {
+  const { _node } = req.body
+  const {from, to, hash, params} = _node
 
-function healthcheck() {
-  if (HEALTHCHECK_URL === "") {
-    return
-  }
-  get(HEALTHCHECK_URL).on('error', console.error);
-}
+  console.log(hash, params)
 
-async function main() {
-  console.log("Searcher Wallet Address: " + await arbitrageSigningWallet.getAddress())
-  console.log("Flashbots Relay Signing Wallet Address: " + await flashbotsRelaySigningWallet.getAddress())
-  const flashbotsProvider = await FlashbotsBundleProvider.create(provider, flashbotsRelaySigningWallet);
+  // if (connected) {
+//   const addedRecord = await Transaction.create({
+//     from: from,
+//     to: to,
+//     hash: hash,
+//     input: params
+//   })
 
-  //This will be the call a function that has the core execution of the bot
+//   addedRecord.save().then(res => {
+//     console.log(res)
+//   })
+// }
+ 
+  
+//   res.send("Information added to the"
+//          + " database successfully.")
+// })
+  
+app.listen(port, () => {
+  console.log(`Server start on port ${port}`)
+})
 
-}
 
-main();
+start()
