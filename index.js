@@ -43,8 +43,13 @@ app.post('/upload', async (req, res) => {
   const { _node } = req.body
   const {from, to, hash, params} = _node
 
-  console.log(hash, params)
+  console.log("hash: ", hash)
+  console.log(
+    "params: ", JSON.stringify(params))
 
+  console.log("\n\n\n")
+  res.send("recieved data")
+})
   // if (connected) {
 //   const addedRecord = await Transaction.create({
 //     from: from,

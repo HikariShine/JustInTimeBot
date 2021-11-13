@@ -12,7 +12,6 @@ const store = async (node) => {
     await axios.post("http://localhost:3000/upload", {
         _node: node,
     }).then(res => {
-        console.log("status", res.status)
         }
     ).catch(error => {
         console.log(error)
