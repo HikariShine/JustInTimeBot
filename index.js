@@ -7,6 +7,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { start } from './data/Mempool.js'
 import Transaction from './models/transaction.js'
+import getPool from './data/Graph.js';
 
 dotenv.config();
 
@@ -39,6 +40,17 @@ app.use(cors());
 
 // Post route to handle form submission 
 // logic and add data to the database
+
+
+let pools
+
+await getPool().then(res => {
+  pools = res.data.pools
+})
+
+console.log(pools)
+
+
 app.post('/upload', async (req, res) => {
   const { _node } = req.body
   const {from, to, hash, params} = _node

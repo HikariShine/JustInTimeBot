@@ -2,8 +2,12 @@ import Web3 from "web3";
 import abiDecoder from "abi-decoder";
 import { abi } from "../abi/uniswapV3Factory.js";
 import axios from "axios";
+import dotenv from 'dotenv';
 
-var web3 = new Web3('wss://mainnet.infura.io/ws/v3/492be9e62d794c74984a79a3c43c50a5');
+dotenv.config();
+
+
+var web3 = new Web3(process.env.WSS_ENDPOINT);
 
 var subscription;
 
@@ -29,8 +33,11 @@ export const start = async () => {
                         if (transaction.to == '0xE592427A0AEce92De3Edee1F18E0157C05861564') {
                         var node = {
                             from: transaction.from, to: transaction.to, hash: transaction.hash, params: abiDecoder.decodeMethod(transaction.input)}
+                        if (node.params.name == "exactInputSingle") {
                         store(node)
                         }
+                        }
+
                     }
                 });
         })
