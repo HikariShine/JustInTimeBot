@@ -1,13 +1,12 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { start } from './data/Mempool.js'
-import Transaction from './models/transaction.js'
 import getPool from './data/Graph.js';
+import nacl from 'tweetnacl';
 
 dotenv.config();
 
@@ -23,32 +22,21 @@ app.use(morgan('common'));
 app.use(cors());
 
 
-// var connected = false
-
-// mongoose.connect(
-//   process.env.MONGO_URL,
-//   {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     useFindAndModify: true,
-//   },
-//   () => {
-//     console.log("mongodb connected!");
-//     connected = true
-//   },
-// )
-
-// Post route to handle form submission 
-// logic and add data to the database
 
 
-let pools
+let pools = {
+
+}
 
 await getPool().then(res => {
-  pools = res.data.pools
+  res.data.pools.map(pool => {
+    pools[pool.id] = { token0: pool.token0, token1: pool.token1, feesUSD: pool.feesUSD}
+  })
 })
 
+
 console.log(pools)
+
 
 
 app.post('/upload', async (req, res) => {
@@ -57,28 +45,18 @@ app.post('/upload', async (req, res) => {
 
   console.log("hash: ", hash)
   console.log(
-    "params: ", JSON.stringify(params))
+    "tokenIn: ", params.params[0].value[0], 
+    "\ntokenOut:", params.params[0].value[1],
+    "\nfee: ", params.params[0].value[2],
+    "\nrecepient: ", params.params[0].value[3],
+    "\ndeadline: ", params.params[0].value[4],
+    "\namountIn: ", params.params[0].value[5],
+  )
 
-  console.log("\n\n\n")
   res.send("recieved data")
+  console.log("\n")
 })
-  // if (connected) {
-//   const addedRecord = await Transaction.create({
-//     from: from,
-//     to: to,
-//     hash: hash,
-//     input: params
-//   })
 
-//   addedRecord.save().then(res => {
-//     console.log(res)
-//   })
-// }
- 
-  
-//   res.send("Information added to the"
-//          + " database successfully.")
-// })
   
 app.listen(port, () => {
   console.log(`Server start on port ${port}`)

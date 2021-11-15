@@ -5,9 +5,10 @@ const APIURL = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3'
 
 const tokensQuery = `
   query($first: Int, $orderBy: BigInt, $orderDirection: String) {
-        pools {
+        pools(first: $first, orderBy: $orderBy, orderDirection: $orderDirection) {
           id
           liquidity
+          feesUSD
           totalValueLockedUSD
             token0 {
             name
@@ -38,7 +39,7 @@ export default function getPool() {
     query: gql(tokensQuery),
     variables: {
       first: 10,
-      orderBy: 'createdAtTimestamp',
+      orderBy: 'feesUSD',
       orderDirection: 'desc',
     },
   })

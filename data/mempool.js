@@ -15,9 +15,7 @@ var subscription;
 const store = async (node) => {
     await axios.post("http://localhost:3000/upload", {
         _node: node,
-    }).then(res => {
-        }
-    ).catch(error => {
+    }).catch(error => {
         console.log(error)
     })
 }

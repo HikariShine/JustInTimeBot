@@ -1,7 +1,17 @@
 Currently, JITbot only has the capabilities of scanning the pending mempool using an Infura node, and then querying for uniswap v3 router transactions. It also has the capabilities of decoding the transaction input using the contract ABI. Next steps will be to store the recorded transactions in some sort of database for future research purposes, and in addition further query the transactions to locate specific coin pairs that are being traded. This will quickly transition to the ability to locate a specific transaction, and dispatch it to flashbots bundled with another transaction that deposits liquidity into the specific pool being traded. 
 
 
+11/15
 
+JITbot will have the ability to query the graph for pools of x type. For the research purposes of constructing the bot, it will simply take the first 100 pools that have generated the most fees in USD to date. The bot will then check each incoming transaction against these pools for the following case:
+
+If transaction is in a target Pool:
+    get target value for token0, token1 from transaction 
+    call smart contract and provide liquidity for Pool at +- y price range around target value for transaction where y is range of our target band /2
+
+    (Hypothesis: The higher y is, the less profitable the trade is, while the smaller y is, and more concentrated the price band is, the riskier the strategy is)
+
+    
 
 
 
