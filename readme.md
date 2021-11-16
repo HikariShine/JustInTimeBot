@@ -1,7 +1,7 @@
 This is a research project looking into how Just-In-Time liquidity would be feasible to implement. Mind that this MEV strategy requires a very large amount of capital and so is not necessarily practical for implementation. This code makes no attempt at generating profit.
 
 
-Currently, JustInTimebot only has the capabilities of scanning the pending mempool using an Infura node, and then querying for uniswap v3 router transactions. It also has the capabilities of decoding the transaction input using the contract ABI. Next steps will be to store the recorded transactions in some sort of database for future research purposes, and in addition further query the transactions to locate specific coin pairs that are being traded. This will quickly transition to the ability to locate a specific transaction, and dispatch it to flashbots bundled with another transaction that deposits liquidity into the specific pool being traded. 
+Currently, JustInTimebot only has the capabilities of scanning the pending mempool using a node, and then querying for uniswap v3 router transactions. It also has the capabilities of decoding the transaction input using the contract ABI. Next steps will be to store the recorded transactions in some sort of database for future research purposes, and in addition further query the transactions to locate specific coin pairs that are being traded. This will quickly transition to the ability to locate a specific transaction, and dispatch it to flashbots bundled with another transaction that deposits liquidity into the specific pool being traded. 
 
 
 11/15
