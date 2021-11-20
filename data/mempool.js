@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
-var web3 = new Web3(process.env.WSS_ENDPOINT);
+export var web3 = new Web3(process.env.WSS_ENDPOINT);
 
 var subscription;
 

@@ -6,6 +6,7 @@ Currently, JustInTimebot only has the capabilities of scanning the pending mempo
 
 11/15
 
+
 bot will have the ability to query the graph for pools of x type. For the research purposes of constructing the bot, it will simply take the first 100 pools that have generated the most fees in USD to date. The bot will then check each incoming transaction against these pools for the following case:
 
 If transaction is in a target Pool:

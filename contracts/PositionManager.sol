@@ -58,6 +58,7 @@ contract LiquidityExamples is IERC721Receiver {
         deposits[tokenId] = Deposit({owner: owner, liquidity: liquidity, token0: token0, token1: token1});
     }
 
+
     function _getDeposits() public returns(uint256[]) {
         require(msg.sender == owner);
         return deposits;

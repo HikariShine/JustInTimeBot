@@ -4,9 +4,9 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { start } from './data/Mempool.js'
+import { start } from './data/Mempool.js';
 import getPool from './data/Graph.js';
-import nacl from 'tweetnacl';
+
 
 dotenv.config();
 
@@ -45,13 +45,15 @@ app.post('/upload', async (req, res) => {
 
   console.log("hash: ", hash)
   console.log(
+    params.params[0],
     "tokenIn: ", params.params[0].value[0], 
     "\ntokenOut:", params.params[0].value[1],
     "\nfee: ", params.params[0].value[2],
     "\nrecepient: ", params.params[0].value[3],
     "\ndeadline: ", params.params[0].value[4],
     "\namountIn: ", params.params[0].value[5],
-  )
+    
+    )
 
   res.send("recieved data")
   console.log("\n")
