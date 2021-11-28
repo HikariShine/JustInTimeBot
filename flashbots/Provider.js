@@ -15,4 +15,3 @@ const flashbotsProvider = await FlashbotsBundleProvider.create(
   authSigner // ethers.js signer wallet, only for signing request payloads, not transactions
 )
 
-console.log(flashbotsProvider.getEtherPrice())

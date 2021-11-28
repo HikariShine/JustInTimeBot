@@ -6,7 +6,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { start } from './data/Mempool.js';
 import getPool from './data/Graph.js';
-
+import {IncreaseLiquidity, DescreaseLiquidity} from "./contracts/Interaction"
 
 dotenv.config();
 
@@ -22,15 +22,11 @@ app.use(morgan('common'));
 app.use(cors());
 
 
-
-
-let pools = {
-
-}
+let pools = {}
 
 await getPool().then(res => {
   res.data.pools.map(pool => {
-    pools[pool.id] = { token0: pool.token0, token1: pool.token1, feesUSD: pool.feesUSD}
+    pools[pool.id] = { token0: pool.token0, token1: pool.token1, feesUSD: pool.feesUSD }
   })
 })
 
@@ -43,17 +39,26 @@ app.post('/upload', async (req, res) => {
   const { _node } = req.body
   const {from, to, hash, params} = _node
 
-  console.log("hash: ", hash)
-  console.log(
-    params.params[0],
-    "tokenIn: ", params.params[0].value[0], 
-    "\ntokenOut:", params.params[0].value[1],
-    "\nfee: ", params.params[0].value[2],
-    "\nrecepient: ", params.params[0].value[3],
-    "\ndeadline: ", params.params[0].value[4],
-    "\namountIn: ", params.params[0].value[5],
+  // console.log("hash: ", hash)
+  // console.log(
+  //   params.params[0],
+  //   "tokenIn: ", params.params[0].value[0], 
+  //   "\ntokenOut:", params.params[0].value[1],
+  //   "\nfee: ", params.params[0].value[2],
+  //   "\nrecepient: ", params.params[0].value[3],
+  //   "\ndeadline: ", params.params[0].value[4],
+  //   "\namountIn: ", params.params[0].value[5],
+  //   )
+  if (pools[params.params[0].value[3]]) {
+    // On match with an expected pool
+    // create transaction to increase liquidity in the pool
+    IncreaseLiquidity()
+    // deploy transaction + the captured transaction in a bundle to flashbots
     
-    )
+
+
+  console.log(pools[params.params[0].value[3]])
+  }
 
   res.send("recieved data")
   console.log("\n")
